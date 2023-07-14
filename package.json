@@ -1,0 +1,19 @@
+{
+  "name": "f-react-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "bin": {
+    "f-react-cli": "bin/cli.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "felix",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^11.0.0",
+    "inquirer": "^9.2.8"
+  }
+}
