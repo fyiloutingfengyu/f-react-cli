@@ -6,6 +6,7 @@ import chalk from 'chalk';
 import fs from 'fs-extra';
 import logSymbols from 'log-symbols';
 import handlebars from 'handlebars';
+import templateConfig from '../config/template.js';
 
 export default (program) => {
   program.command('create <projectName>')
@@ -27,15 +28,12 @@ export default (program) => {
           name: 'template',
           message: '请选择要使用的项目模板',
           type: 'list',
-          choices: [
-            'react-cli',
-            'react-webpack'
-          ]
+          choices: templateConfig.names
         }
       ]).then(async answer => {
         console.log('answer', answer);
-        const { author, description } = answer;
-        const pkaOptions = {
+        const { author, description, template } = answer;
+        const pakOptions = {
           name: projectName,
           author,
           description
@@ -64,11 +62,7 @@ export default (program) => {
         const spinner = ora().start();
         spinner.text = '模板项目正在下载中...';
 
-        let repository = 'fyiloutingfengyu/f-react-template';
-
-        if (answer.template === 'react-webpack') {
-          repository = 'fyiloutingfengyu/f-react-template-webpack';
-        }
+        const repository = templateConfig.repositories[template];
 
         download(repository, downloadPath, (error) => {
           if (!error) {
@@ -77,7 +71,7 @@ export default (program) => {
             if (fs.pathExistsSync(targetPackageFile)) {
               const content = fs.readFileSync(targetPackageFile, 'utf8');
               // 利用 handlebars 将用户输入的部分内容写入模板中
-              const result = handlebars.compile(content)(pkaOptions);
+              const result = handlebars.compile(content)(pakOptions);
 
               fs.writeFileSync(targetPackageFile, result);
             } else {
