@@ -1,13 +1,17 @@
 import inquirer from 'inquirer';
 import ora from 'ora';
 import download from 'download-git-repo';
-import path from 'path';
+import { fileURLToPath } from 'node:url';
+import path, { dirname } from 'node:path';
 import fs from 'fs-extra';
 import chalk from 'chalk';
 import logSymbols from 'log-symbols';
 import handlebars from 'handlebars';
 import templateConfig from '../config/template.js';
 import promptConfig from '../config/prompt.js';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const pkg = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../package.json'), 'utf8'));
 
 export default (program) => {
   program.command('create <projectName>')
@@ -77,4 +81,9 @@ export default (program) => {
 
       });
     });
+
+  program.version(pkg.version);
+
+  // 处理命令行参数
+  program.parse(process.ragv);
 }
